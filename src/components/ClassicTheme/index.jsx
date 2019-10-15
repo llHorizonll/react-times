@@ -114,15 +114,16 @@ class ClassicTheme extends React.PureComponent {
   }
 
   render() {
-    const { timeMode, timeConfig = {}, disabledTimes = [] } = this.props;
+    const { timeMode, timeConfig = {}, disabledTimes = {} } = this.props;
+
+    const disRangeTimes = timeMode === 12
+    ? timeHelper.get12ModeTimes(disabledTimes)
+    : timeHelper.get24ModeTimes(disabledTimes);
+
     const timeDatas =
       timeMode === 12
-        ? timeHelper
-            .get12ModeTimes(timeConfig)
-            .filter(t => !disabledTimes.includes(t))
-        : timeHelper
-            .get24ModeTimes(timeConfig)
-            .filter(t => !disabledTimes.includes(t));
+        ? timeHelper.get12ModeTimes(timeConfig).filter(t => !disRangeTimes.includes(t))
+        : timeHelper.get24ModeTimes(timeConfig).filter(t => !disRangeTimes.includes(t));
     return (
       <div
         className="modal_container classic_theme_container"
