@@ -63,7 +63,7 @@ const propTypes = {
   useTz: PropTypes.bool,
   closeOnOutsideClick: PropTypes.bool,
   timeConfig: PropTypes.object,
-  disabledTimes: PropTypes.array,
+  disabledTimes: PropTypes.object,
   disabled: PropTypes.bool,
   focusDropdownOnTime: PropTypes.bool,
 };
@@ -96,7 +96,10 @@ const defaultProps = {
     step: 30,
     unit: 'minutes'
   },
-  disabledTimes: [],
+  disabledTimes: {
+    step: 30,
+    unit: 'minutes'
+  },
   disabled: false,
   focusDropdownOnTime: true,
 };
