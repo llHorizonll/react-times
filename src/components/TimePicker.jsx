@@ -63,6 +63,7 @@ const propTypes = {
   useTz: PropTypes.bool,
   closeOnOutsideClick: PropTypes.bool,
   timeConfig: PropTypes.object,
+  disabledTime: PropTypes.array,
   disabled: PropTypes.bool,
   focusDropdownOnTime: PropTypes.bool,
 };
@@ -95,6 +96,7 @@ const defaultProps = {
     step: 30,
     unit: 'minutes'
   },
+  disabledTime: [],
   disabled: false,
   focusDropdownOnTime: true,
 };
@@ -302,6 +304,7 @@ class TimePicker extends React.PureComponent {
       limitDrag,
       minuteStep,
       timeConfig,
+      disabledTime,
       colorPalette,
       showTimezone,
       onTimezoneChange,
@@ -316,7 +319,7 @@ class TimePicker extends React.PureComponent {
 
     const { timezoneData } = this.state;
     const [hour, minute] = this.hourAndMinute;
-
+    console.log(theme);
     return (
       <DialPlate
         hour={hour}
@@ -329,6 +332,7 @@ class TimePicker extends React.PureComponent {
         timezone={timezoneData}
         meridiem={this.meridiem}
         timeConfig={timeConfig}
+        disabledTime={disabledTime}
         showTimezone={showTimezone}
         phrases={this.languageData}
         colorPalette={colorPalette}
