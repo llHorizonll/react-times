@@ -1,7 +1,9 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-mixed-operators */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import timeHelper from '../../utils/time';
+import React from "react";
+import PropTypes from "prop-types";
+import timeHelper from "../../utils/time";
 
 const propTypes = {
   hour: PropTypes.string,
@@ -12,19 +14,19 @@ const propTypes = {
   colorPalette: PropTypes.string,
   handleTimeChange: PropTypes.func,
   handleMeridiemChange: PropTypes.func,
-  focusDropdownOnTime: PropTypes.bool,
+  focusDropdownOnTime: PropTypes.bool
 };
 
 const defaultProps = {
-  hour: '00',
-  minute: '00',
+  hour: "00",
+  minute: "00",
   timeMode: 24,
-  meridiem: 'AM',
-  colorPalette: 'light',
+  meridiem: "AM",
+  colorPalette: "light",
   clearFocus: Function.prototype,
   handleTimeChange: Function.prototype,
   handleMeridiemChange: Function.prototype,
-  focusDropdownOnTime: false,
+  focusDropdownOnTime: false
 };
 
 class ClassicTheme extends React.PureComponent {
@@ -45,26 +47,31 @@ class ClassicTheme extends React.PureComponent {
 
   handleFocusDropdownOnTime() {
     if (this.props.focusDropdownOnTime) {
-      this.dropDown.current.scrollTop = this.dropDownActiveTime && this.dropDownActiveTime.current && this.dropDownActiveTime.current.offsetTop || 0;
+      this.dropDown.current.scrollTop =
+        (this.dropDownActiveTime &&
+          this.dropDownActiveTime.current &&
+          this.dropDownActiveTime.current.offsetTop) ||
+        0;
     }
   }
 
   handleTimeChange(timeData) {
-    const [time, meridiem] = timeData.split(' ');
-    const [hour, minute] = time.split(':');
+    const [time, meridiem] = timeData.split(" ");
+    const [hour, minute] = time.split(":");
     const { handleTimeChange, clearFocus } = this.props;
-    handleTimeChange && handleTimeChange({
-      hour,
-      minute,
-      meridiem: meridiem || null
-    });
+    handleTimeChange &&
+      handleTimeChange({
+        hour,
+        minute,
+        meridiem: meridiem || null
+      });
     clearFocus && clearFocus();
   }
 
   checkTimeIsActive(time) {
     const { hour, minute, meridiem } = this.props;
-    const [times, rawMeridiem] = time.split(' ');
-    const [rawHour, rawMinute] = times.split(':');
+    const [times, rawMeridiem] = time.split(" ");
+    const [rawHour, rawMinute] = times.split(":");
     const currentHour = timeHelper.validate(rawHour);
     const currentMinute = timeHelper.validate(rawMinute);
 
@@ -85,9 +92,9 @@ class ClassicTheme extends React.PureComponent {
 
     return timeDatas.map((timeData, index) => {
       const timeClass = this.checkTimeIsActive(timeData)
-        ? 'classic_time active'
-        : 'classic_time';
-      const [time, meridiem] = timeData.split(' ');
+        ? "classic_time active"
+        : "classic_time";
+      const [time, meridiem] = timeData.split(" ");
       return (
         <div
           key={index}
@@ -95,7 +102,9 @@ class ClassicTheme extends React.PureComponent {
             this.handleTimeChange(timeData);
           }}
           className={`${timeClass} ${colorPalette}`}
-          ref={this.checkTimeIsActive(timeData) ? this.dropDownActiveTime : null}
+          ref={
+            this.checkTimeIsActive(timeData) ? this.dropDownActiveTime : null
+          }
         >
           {time}
           {meridiem ? <span className="meridiem">{meridiem}</span> : null}
@@ -105,11 +114,15 @@ class ClassicTheme extends React.PureComponent {
   }
 
   render() {
-    const { timeMode, timeConfig = {} } = this.props;
-    const timeDatas = timeMode === 12
-      ? timeHelper.get12ModeTimes(timeConfig)
-      : timeHelper.get24ModeTimes(timeConfig);
-
+    const { timeMode, timeConfig = {}, disabledTimes = [] } = this.props;
+    const timeDatas =
+      timeMode === 12
+        ? timeHelper
+            .get12ModeTimes(timeConfig)
+            .filter(t => !disabledTimes.includes(t))
+        : timeHelper
+            .get24ModeTimes(timeConfig)
+            .filter(t => !disabledTimes.includes(t));
     return (
       <div
         className="modal_container classic_theme_container"
